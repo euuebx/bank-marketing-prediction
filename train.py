@@ -1,21 +1,5 @@
 """
 train.py — Bank Marketing Term Deposit Prediction
-
-Real dataset: UCI Bank Marketing (Moro et al., 2014), 41,188 rows.
-Predicts whether a customer subscribes to a term deposit ('y').
-
-Pipeline mirrors the resume-bullet structure:
-  - Classifiers: Random Forest, XGBoost
-  - Feature selection: Recursive Feature Elimination (RFE)
-  - Dimensionality reduction: PCA
-  - Metrics: accuracy, ROC-AUC
-
-IMPORTANT DATA NOTE:
-'duration' (call length in seconds) is dropped. The dataset docs explicitly
-warn it leaks the target — you don't know call length before you make the
-call, and duration=0 always means y=no. Leaving it in gives artificially
-inflated accuracy that wouldn't hold in a real deployment. Dropping it is
-the correct, defensible choice for a genuine predictive model.
 """
 
 import os
