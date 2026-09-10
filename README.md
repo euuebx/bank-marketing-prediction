@@ -1,37 +1,49 @@
 # Bank Term Deposit Prediction
 
-Built this to practice classification on a real dataset. Used the UCI Bank Marketing dataset (41k+ records from a Portuguese bank's telemarketing campaign) to predict whether a customer would sign up for a term deposit.
+Built this project to practice classification using a real-world dataset. I used the UCI Bank Marketing dataset, which contains 41k+ records from a Portuguese bank's telemarketing campaign, and tried to predict whether a customer would subscribe to a term deposit.
 
-Data source: https://archive.ics.uci.edu/dataset/222/bank+marketing
+Data source: UCI Bank Marketing Dataset
 
 ## What I did
 
-Trained a Random Forest and an XGBoost model to predict if a customer subscribes (the `y` column).
-
-Dropped `duration` (call length) because it basically leaks the answer, a 0 second call means no every time. Keeping it would've made the accuracy look better than it actually is.
-
-Used RFE to cut down to the features that actually matter, and PCA to see how separable the two outcomes are.
-
-Only ~11% of people actually said yes, so I had to weight the classes or the model would just guess "no" every time and still score high.
+* Trained a Random Forest and XGBoost model to predict whether a customer subscribes (`y`).
+* Removed `duration` because it causes data leakage. The call duration is only known after the call, so using it would make the model look better than it would be in a real prediction.
+* Used RFE to select a smaller set of important features.
+* Used PCA to get a 2D view of the data and see how well the two outcomes separate.
+* Used class weighting because only around 11% of customers subscribed. Without this, a model could get high accuracy just by predicting "no" most of the time.
 
 ## Results
 
-- Random Forest: ~87% accuracy, ROC-AUC ~0.82
-- XGBoost: ~85% accuracy, ROC-AUC ~0.81
+* Random Forest: ~87% accuracy, ROC-AUC ~0.82
+* XGBoost: ~85% accuracy, ROC-AUC ~0.81
+
+ROC-AUC was used alongside accuracy because the dataset is quite imbalanced.
 
 ## What stood out
 
-The features that mattered most weren't really about the customer. It was mostly economic stuff (interest rates, employment numbers at the time). Made sense once I thought about it, people's decisions probably track the economy more than their personal profile.
+The features with the highest importance were mostly related to economic conditions, such as interest rates and employment figures, rather than just individual customer characteristics.
+
+This was interesting because it suggests that the wider economic situation may have a significant effect on whether someone decides to subscribe to a term deposit.
 
 ## Run it
 
+Install the required packages:
+
+```bash
 pip install scikit-learn xgboost pandas numpy matplotlib
+```
+
+Then run:
+
+```bash
 python train.py
+```
 
-Needs bank-additional-full.csv in the same folder.
+Make sure `bank-additional-full.csv` is in the same folder as `train.py`.
 
-## Could improve
+## Things I could improve
 
-- One-hot encode instead of label encoding (label encoding kind of implies an order that isn't really there for stuff like job type)
-- Try SMOTE instead of class weights
-- More thorough cross-validation instead of one train/test split
+* Use one-hot encoding instead of label encoding for categorical variables.
+* Try SMOTE or other methods for dealing with class imbalance.
+* Use cross-validation instead of relying on a single train/test split.
+* Tune the model parameters to see if the results can be improved.
