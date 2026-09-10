@@ -6,11 +6,13 @@ Data source: https://archive.ics.uci.edu/dataset/222/bank+marketing
 
 ## What I did
 
-- Trained a Random Forest and an XGBoost classifier to predict the `y` column (subscribed or not)
-- Dropped the `duration` column on purpose. It's call length, and the dataset notes say it basically gives away the answer (if the call was 0 seconds, obviously no). Keeping it in would've inflated the accuracy but made the model useless in practice.
-- Used RFE to find the most useful features instead of just throwing everything in
-- Ran PCA to visualize how separable the two classes actually are
-- Had to use class weighting since only ~11% of customers said yes. Otherwise the model could just predict "no" every time and still look accurate
+Trained a Random Forest and an XGBoost model to predict if a customer subscribes (the `y` column).
+
+Dropped `duration` (call length) because it basically leaks the answer, a 0 second call means no every time. Keeping it would've made the accuracy look better than it actually is.
+
+Used RFE to cut down to the features that actually matter, and PCA to see how separable the two outcomes are.
+
+Only ~11% of people actually said yes, so I had to weight the classes or the model would just guess "no" every time and still score high.
 
 ## Results
 
