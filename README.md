@@ -1,49 +1,51 @@
-# Bank Term Deposit Prediction
+# Bank Marketing Prediction
 
-Built this project to practice classification using a real-world dataset. I used the UCI Bank Marketing dataset, which contains 41k+ records from a Portuguese bank's telemarketing campaign, and tried to predict whether a customer would subscribe to a term deposit.
+A machine learning project that predicts whether a bank customer will subscribe to a term deposit, using data from a Portuguese bank's phone marketing campaign.
 
-Data source: UCI Bank Marketing Dataset
+## Dataset
 
-## What I did
+Bank Marketing dataset from the UCI Machine Learning Repository:
+https://archive.ics.uci.edu/dataset/222/bank+marketing
 
-* Trained a Random Forest and XGBoost model to predict whether a customer subscribes (`y`).
-* Removed `duration` because it causes data leakage. The call duration is only known after the call, so using it would make the model look better than it would be in a real prediction.
-* Used RFE to select a smaller set of important features.
-* Used PCA to get a 2D view of the data and see how well the two outcomes separate.
-* Used class weighting because only around 11% of customers subscribed. Without this, a model could get high accuracy just by predicting "no" most of the time.
+File used: `bank-additional-full.csv`. Each row is one phone call with customer details, campaign details, economic indicators, and a target column `y` (yes/no).
 
 ## Results
 
-* Random Forest: ~87% accuracy, ROC-AUC ~0.82
-* XGBoost: ~85% accuracy, ROC-AUC ~0.81
+| Model | Accuracy | ROC-AUC |
+|---|---|---|
+| Random Forest | 86.4% | 0.818 |
+| XGBoost | 84.9% | 0.811 |
 
-ROC-AUC was used alongside accuracy because the dataset is quite imbalanced.
+Random Forest did slightly better.
 
-## What stood out
+Classification report (Random Forest):
 
-The features with the highest importance were mostly related to economic conditions, such as interest rates and employment figures, rather than just individual customer characteristics.
+| Class | Precision | Recall | F1 |
+|---|---|---|---|
+| no  | 0.95 | 0.89 | 0.92 |
+| yes | 0.43 | 0.64 | 0.51 |
 
-This was interesting because it suggests that the wider economic situation may have a significant effect on whether someone decides to subscribe to a term deposit.
+Top features were euribor3m, nr.employed, and emp.var.rate, so the economic indicators mattered more than the customer's personal details.
 
-## Run it
+## Files
 
-Install the required packages:
+| File | What it is |
+|---|---|
+| `train.py` | main script |
+| `bank-additional-full.csv` | dataset |
+| `feature_importance.png` | feature importance chart |
+| `pca_plot.png` | PCA scatter plot |
 
-```bash
-pip install scikit-learn xgboost pandas numpy matplotlib
+## Requirements
+
+Python 3.12+, plus:
+
+```
+pip install pandas numpy scikit-learn xgboost matplotlib seaborn
 ```
 
-Then run:
+## How to run
 
-```bash
+```
 python train.py
 ```
-
-Make sure `bank-additional-full.csv` is in the same folder as `train.py`.
-
-## Things I could improve
-
-* Use one-hot encoding instead of label encoding for categorical variables.
-* Try SMOTE or other methods for dealing with class imbalance.
-* Use cross-validation instead of relying on a single train/test split.
-* Tune the model parameters to see if the results can be improved.
